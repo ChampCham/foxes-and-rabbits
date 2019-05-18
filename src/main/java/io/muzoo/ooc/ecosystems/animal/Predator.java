@@ -1,5 +1,6 @@
 package io.muzoo.ooc.ecosystems.animal;
 
+import io.muzoo.ooc.ecosystems.AnimalFactory;
 import io.muzoo.ooc.ecosystems.Field;
 import io.muzoo.ooc.ecosystems.Location;
 
@@ -13,8 +14,14 @@ public abstract class Predator extends Animal{
 
     protected int foodLevel;
 
-    public Predator(boolean randomAge, Location location) {
-        super(randomAge, location);
+    public Predator(){ super(); }
+
+    /**
+     * Set a new Random Age
+     *
+     *  @param randomAge If true, the animal will have random age.
+     */
+    public  void setRandomAge(boolean randomAge){
         if (randomAge) {//For only populated the first field
             foodLevel = rand.nextInt(getRabbitFoodValue());
         } else { //Predator new born
@@ -36,24 +43,7 @@ public abstract class Predator extends Animal{
         incrementAge();
         incrementHunger();
         if (alive) {
-            // New predators are born into adjacent locations.
-            int births = breed(); //the number of new born predators
-            for (int b = 0; b < births; b++) {
-                //Random location for the new born predator near their parent
-                Location loc = updatedField.randomAdjacentLocation(location);
-
-                Animal newPredator;
-                if (getClassName().equals("Fox")){// New predators are born
-                    newPredator = new Fox(false, loc);
-                }else {
-                    newPredator = new Tiger(false, loc);
-                }
-
-                newPredatores.add(newPredator);//Add the new predator to new Predators list
-
-                updatedField.place(newPredator, loc);
-            }
-
+            giveBirth(currentField, updatedField, newPredatores);
             // Move towards the source of food if found.
             Location newLocation = findFood(currentField, location);
             if (newLocation == null) {  // no food found - move randomly
@@ -106,7 +96,5 @@ public abstract class Predator extends Animal{
     }
 
     abstract protected int getRabbitFoodValue();
-
-    abstract protected String getClassName();
 
 }

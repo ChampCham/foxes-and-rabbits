@@ -1,7 +1,6 @@
 package io.muzoo.ooc.ecosystems.animal;
 
 import io.muzoo.ooc.ecosystems.Field;
-import io.muzoo.ooc.ecosystems.Location;
 import java.util.List;
 
 /**
@@ -26,12 +25,8 @@ public class Rabbit extends Prey{
     /**
      * Create a new rabbit. A rabbit may be created with age
      * zero (a new born) or with a random age.
-     *
-     * @param randomAge If true, the rabbit will have a random age.
      */
-    public Rabbit(boolean randomAge, Location location) {
-        super(randomAge, location);
-    }
+    public Rabbit(){ super();}
 
 
     @Override
@@ -40,25 +35,18 @@ public class Rabbit extends Prey{
     }
 
     @Override
-    protected int getMaxAge() {
-        return MAX_AGE;
+    protected int getMaxAge(){ return MAX_AGE; }
+
+    @Override
+    protected double getBreedingProbability(){ return BREEDING_PROBABILITY;
     }
 
     @Override
-    protected double getBreedingProbability() {
-        return BREEDING_PROBABILITY;
-    }
+    protected int getMaxLitterSize(){ return MAX_LITTER_SIZE; }
 
     @Override
-    protected int getMaxLitterSize() {
-        return MAX_LITTER_SIZE;
-    }
+    protected int getBreedingAge(){ return BREEDING_AGE; }
 
     @Override
-    protected int getBreedingAge() {
-        return BREEDING_AGE;
-    }
-
-    @Override
-    protected String getClassName() { return "Rabbit"; }
+    protected String getClassName(){ return "rabbit"; }
 }

@@ -115,8 +115,6 @@ public class Simulator {
         }
         // add new born animals to the list of animals
         animals.addAll(newAnimals);
-
-
         // Swap the field and updatedField at the end of the step.
         Field temp = field;
         field = updatedField;
@@ -153,15 +151,15 @@ public class Simulator {
             for (int col = 0; col < field.getWidth(); col++) {
 
                 if (rand.nextDouble() <= TIGER_CREATION_PROBABILITY) {
-                    Animal tiger = new Tiger(true, new Location(row,col));
+                    Animal tiger = AnimalFactory.create("tiger",true, new Location(row,col));
                     animals.add(tiger);
                     field.place(tiger, row, col);
                 }else if (rand.nextDouble() <= FOX_CREATION_PROBABILITY) {
-                    Animal fox = new Fox(true, new Location(row,col));
+                    Animal fox = AnimalFactory.create("fox",true, new Location(row,col));
                     animals.add(fox);
                     field.place(fox, row, col);
                 } else if (rand.nextDouble() <= RABBIT_CREATION_PROBABILITY) {
-                    Animal rabbit = new Rabbit(true, new Location(row,col));
+                    Animal rabbit = AnimalFactory.create("rabbit",true, new Location(row,col));
                     animals.add(rabbit);
                     field.place(rabbit, row, col);
                 }

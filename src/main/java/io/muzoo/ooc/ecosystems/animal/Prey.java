@@ -1,12 +1,13 @@
 package io.muzoo.ooc.ecosystems.animal;
 
+import io.muzoo.ooc.ecosystems.AnimalFactory;
 import io.muzoo.ooc.ecosystems.Field;
 import io.muzoo.ooc.ecosystems.Location;
 
 import java.util.List;
 
 public abstract class Prey extends Animal{
-    public Prey(boolean randomAge, Location location) { super(randomAge, location); }
+    public Prey(){ super(); }
 
     /**
      * This is what the rabbit does most of the time - it runs
@@ -18,16 +19,8 @@ public abstract class Prey extends Animal{
     public void run(Field updatedField, List newRabbits) {
         incrementAge();
         if (isAlive()) {
-            int births = breed();
-            for (int b = 0; b < births; b++) {
-                Location loc = updatedField.randomAdjacentLocation(location);
-                Animal newRabbit;
-                if (getClassName().equals("Rabbit")){
-                  newRabbit = new Rabbit(false, loc);
-                    newRabbits.add(newRabbit);
-                    updatedField.place(newRabbit, loc);
-                }
-            }
+
+            giveBirth(updatedField, updatedField, newRabbits);
             Location newLocation = updatedField.freeAdjacentLocation(location);
 
             // Only transfer to the updated field if there was a free location
@@ -41,5 +34,4 @@ public abstract class Prey extends Animal{
         }
     }
 
-    abstract protected String getClassName();
 }

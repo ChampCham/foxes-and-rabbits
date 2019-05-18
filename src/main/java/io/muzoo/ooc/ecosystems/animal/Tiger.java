@@ -23,13 +23,9 @@ public class Tiger extends Predator{
     /**
      * Create a tiger. A tiger can be created as a new born (age zero
      * and not hungry) or with random age.
-     *
-     * @param randomAge If true, the tiger will have random age and hunger level.
      */
 
-    public Tiger(boolean randomAge, Location location) {
-        super(randomAge, location);
-    }
+    public Tiger(){ super(); }
 
     @Override
     public void act(Field field, Field updatedField, List<Animal> newAnimals) {
@@ -37,28 +33,20 @@ public class Tiger extends Predator{
     }
 
     @Override
-    protected int getMaxAge() {
-        return MAX_AGE;
-    }
+    protected int getMaxAge(){ return MAX_AGE; }
 
     @Override
-    protected double getBreedingProbability() {
-        return BREEDING_PROBABILITY;
-    }
+    protected double getBreedingProbability(){ return BREEDING_PROBABILITY; }
 
     @Override
-    protected int getMaxLitterSize() {
-        return MAX_LITTER_SIZE;
-    }
+    protected int getMaxLitterSize(){ return MAX_LITTER_SIZE; }
 
     @Override
-    protected int getBreedingAge() {
-        return BREEDING_AGE;
-    }
+    protected int getBreedingAge(){ return BREEDING_AGE; }
 
     @Override
-    protected int getRabbitFoodValue() { return RABBIT_FOOD_VALUE; }
+    protected int getRabbitFoodValue(){ return RABBIT_FOOD_VALUE; }
 
     @Override
-    protected String getClassName() { return "Tiger"; }
+    protected String getClassName(){ return "tiger"; }
 }

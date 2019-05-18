@@ -1,5 +1,6 @@
 package io.muzoo.ooc.ecosystems.animal;
 
+import io.muzoo.ooc.ecosystems.AnimalFactory;
 import io.muzoo.ooc.ecosystems.Field;
 import io.muzoo.ooc.ecosystems.Location;
 
@@ -26,16 +27,12 @@ public abstract class Animal {
     /**
      * Create a new animal at location in field.
      *
-     *  @param randomAge If true, the animal will have random age.
      */
-    public Animal(boolean randomAge, Location location)
+
+    public Animal()
     {
         age = 0;
         alive = true;
-        this.location = location;
-        if (randomAge) {//For only populated the first field
-            age = rand.nextInt(getMaxAge());
-        }
     }
 
     /**
@@ -64,15 +61,29 @@ public abstract class Animal {
         return births;
     }
 
+    protected void giveBirth(Field currentField, Field updatedField, List newAnimals){
+        // New animals are born into adjacent locations.
+        int births = breed(); //the number of new born animals
+        for (int b = 0; b < births; b++) {
+            //Random location for the new born animal near their parent
+            Location loc = updatedField.randomAdjacentLocation(location);
+
+            Animal newAnimal = AnimalFactory.create(getClassName(), false, loc);
+
+            newAnimals.add(newAnimal);//Add the new animal to new Predators list
+
+            updatedField.place(newAnimal, loc);
+        }
+
+    }
+
 
     /**
      * A animal can breed if it has reached the breeding age.
      *
      * @return true if the animal can breed, false otherwise.
      */
-    private boolean canBreed() {
-        return age >= getBreedingAge();
-    }
+    private boolean canBreed(){ return age >= getBreedingAge(); }
 
 
     /**
@@ -80,16 +91,12 @@ public abstract class Animal {
      *
      * @return true if the animal is still alive.
      */
-    protected boolean isAlive() {
-        return alive;
-    }
+    protected boolean isAlive(){ return alive; }
 
     /**
      * Tell the animal that it's dead now :(
      */
-    protected void setDead() {
-        alive = false;
-    }
+    protected void setDead(){ alive = false; }
 
 
     /**
@@ -98,19 +105,26 @@ public abstract class Animal {
      * @param row The vertical coordinate of the location.
      * @param col The horizontal coordinate of the location.
      */
-    protected void setLocation(int row, int col) {
-        this.location = new Location(row, col);
-    }
+    protected void setLocation(int row, int col){ this.location = new Location(row, col); }
 
     /**
      * Set the animal's location.
      *
      * @param location The animal's location.
      */
-    protected void setLocation(Location location) {
-        this.location = location;
-    }
+    public void setLocation(Location location){ this.location = location; }
 
+
+    /**
+     * Set a random age if randomAge true
+     *
+     *  @param randomAge If true, the animal will have random age.
+     */
+    public  void setRandomAge(boolean randomAge){
+        if (randomAge) {//For only populated the first field
+            age = rand.nextInt(getMaxAge());
+        }
+    }
 
     /**
      * Make this animal act – that is, make it do whatever
@@ -142,5 +156,7 @@ public abstract class Animal {
      * @return The breeding age of this animal.
      */
     abstract protected int getBreedingAge();
+
+    abstract protected String getClassName();
 
 }
