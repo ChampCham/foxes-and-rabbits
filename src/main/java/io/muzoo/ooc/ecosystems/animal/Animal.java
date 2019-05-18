@@ -28,10 +28,11 @@ public abstract class Animal {
      *
      *  @param randomAge If true, the animal will have random age.
      */
-    public Animal(boolean randomAge)
+    public Animal(boolean randomAge, Location location)
     {
         age = 0;
         alive = true;
+        this.location = location;
         if (randomAge) {//For only populated the first field
             age = rand.nextInt(getMaxAge());
         }
@@ -55,7 +56,7 @@ public abstract class Animal {
      *
      * @return The number of births (may be zero).
      */
-    public int breed() {
+    protected int breed() {
         int births = 0;
         if (canBreed() && rand.nextDouble() <= getBreedingProbability()) {
             births = rand.nextInt(getMaxLitterSize()) + 1;
@@ -69,7 +70,7 @@ public abstract class Animal {
      *
      * @return true if the animal can breed, false otherwise.
      */
-    public boolean canBreed() {
+    private boolean canBreed() {
         return age >= getBreedingAge();
     }
 
@@ -79,14 +80,14 @@ public abstract class Animal {
      *
      * @return true if the animal is still alive.
      */
-    public boolean isAlive() {
+    protected boolean isAlive() {
         return alive;
     }
 
     /**
      * Tell the animal that it's dead now :(
      */
-    public void setDead() {
+    protected void setDead() {
         alive = false;
     }
 
@@ -97,7 +98,7 @@ public abstract class Animal {
      * @param row The vertical coordinate of the location.
      * @param col The horizontal coordinate of the location.
      */
-    public void setLocation(int row, int col) {
+    protected void setLocation(int row, int col) {
         this.location = new Location(row, col);
     }
 
@@ -106,10 +107,9 @@ public abstract class Animal {
      *
      * @param location The animal's location.
      */
-    public void setLocation(Location location) {
+    protected void setLocation(Location location) {
         this.location = location;
     }
-
 
 
     /**
@@ -117,14 +117,13 @@ public abstract class Animal {
      * it wants/needs to do.
      * @param newAnimals A list to return newly born animals.
      */
-    abstract public void act(List<Animal> newAnimals);
-
-
+    abstract public void act(Field field,Field updatedField,List<Animal> newAnimals);
     /**
      * Return the max age of this animal.
      * @return The max age of this animal.
      */
     abstract protected int getMaxAge();
+
 
     /**
      * Return the breeding probability of this animal.

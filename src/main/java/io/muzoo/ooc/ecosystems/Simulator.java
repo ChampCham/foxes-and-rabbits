@@ -111,19 +111,7 @@ public class Simulator {
         // let all animals act
         for (Iterator<Animal> iter = animals.iterator(); iter.hasNext(); ) {
             Animal animal = iter.next();
-            if (animal instanceof Rabbit) {
-                Rabbit rabbit = (Rabbit) animal;
-                rabbit.run(updatedField, newAnimals);
-            } else if (animal instanceof Fox) {
-                Fox fox = (Fox) animal;
-                fox.hunt(field, updatedField, newAnimals);
-            }else if (animal instanceof Tiger) {
-                Tiger tiger = (Tiger) animal;
-                tiger.hunt(field, updatedField, newAnimals);
-            } else {
-                System.out.println("found unknown animal");
-            }
-
+            animal.act(field, updatedField,newAnimals);
         }
         // add new born animals to the list of animals
         animals.addAll(newAnimals);
@@ -165,19 +153,16 @@ public class Simulator {
             for (int col = 0; col < field.getWidth(); col++) {
 
                 if (rand.nextDouble() <= TIGER_CREATION_PROBABILITY) {
-                    Animal tiger = new Tiger(true);
+                    Animal tiger = new Tiger(true, new Location(row,col));
                     animals.add(tiger);
-                    tiger.setLocation(row, col);
                     field.place(tiger, row, col);
                 }else if (rand.nextDouble() <= FOX_CREATION_PROBABILITY) {
-                    Animal fox = new Fox(true);
+                    Animal fox = new Fox(true, new Location(row,col));
                     animals.add(fox);
-                    fox.setLocation(row, col);
                     field.place(fox, row, col);
                 } else if (rand.nextDouble() <= RABBIT_CREATION_PROBABILITY) {
-                    Animal rabbit = new Rabbit(true);
+                    Animal rabbit = new Rabbit(true, new Location(row,col));
                     animals.add(rabbit);
-                    rabbit.setLocation(row, col);
                     field.place(rabbit, row, col);
                 }
                 // else leave the location empty.
