@@ -1,5 +1,10 @@
 package io.muzoo.ooc.ecosystems;
 
+import io.muzoo.ooc.ecosystems.animal.Animal;
+import io.muzoo.ooc.ecosystems.animal.Fox;
+import io.muzoo.ooc.ecosystems.animal.Rabbit;
+import io.muzoo.ooc.ecosystems.animal.Tiger;
+
 import java.util.Random;
 import java.util.List;
 import java.util.ArrayList;
@@ -22,14 +27,16 @@ public class Simulator {
     // The default depth of the grid.
     private static final int DEFAULT_DEPTH = 50;
     // The probability that a fox will be created in any given grid position.
+    private static final double TIGER_CREATION_PROBABILITY = 0.01;
+    // The probability that a fox will be created in any given grid position.
     private static final double FOX_CREATION_PROBABILITY = 0.02;
     // The probability that a rabbit will be created in any given grid position.
     private static final double RABBIT_CREATION_PROBABILITY = 0.08;
 
     // The list of animals in the field
-    private List animals;
+    private List<Animal> animals;
     // The list of animals just born
-    private List newAnimals;
+    private List<Animal> newAnimals;
     // The current state of the field.
     private Field field;
     // A second field, used to build the next stage of the simulation.
@@ -59,8 +66,8 @@ public class Simulator {
             depth = DEFAULT_DEPTH;
             width = DEFAULT_WIDTH;
         }
-        animals = new ArrayList();
-        newAnimals = new ArrayList();
+        animals = new ArrayList<>();
+        newAnimals = new ArrayList<>();
         field = new Field(depth, width);
         updatedField = new Field(depth, width);
 
@@ -68,6 +75,7 @@ public class Simulator {
         view = new SimulatorView(depth, width);
         view.setColor(Fox.class, Color.blue);
         view.setColor(Rabbit.class, Color.orange);
+        view.setColor(Tiger.class, Color.red);
 
         // Setup a valid starting point.
         reset();
@@ -101,26 +109,31 @@ public class Simulator {
         newAnimals.clear();
 
         // let all animals act
-        for (Iterator iter = animals.iterator(); iter.hasNext(); ) {
-            Object animal = iter.next();
+        for (Iterator<Animal> iter = animals.iterator(); iter.hasNext(); ) {
+            Animal animal = iter.next();
             if (animal instanceof Rabbit) {
                 Rabbit rabbit = (Rabbit) animal;
                 rabbit.run(updatedField, newAnimals);
             } else if (animal instanceof Fox) {
                 Fox fox = (Fox) animal;
                 fox.hunt(field, updatedField, newAnimals);
+            }else if (animal instanceof Tiger) {
+                Tiger tiger = (Tiger) animal;
+                tiger.hunt(field, updatedField, newAnimals);
             } else {
                 System.out.println("found unknown animal");
             }
+
         }
         // add new born animals to the list of animals
         animals.addAll(newAnimals);
+
 
         // Swap the field and updatedField at the end of the step.
         Field temp = field;
         field = updatedField;
         updatedField = temp;
-        updatedField.clear();
+        updatedField.clear();// clear the old field
 
         // display the new field on screen
         view.showStatus(step, field);
@@ -132,7 +145,7 @@ public class Simulator {
     public void reset() {
         step = 0;
         animals.clear();
-        field.clear();
+        field.clear(); //Null grid
         updatedField.clear();
         populate(field);
 
@@ -150,13 +163,19 @@ public class Simulator {
         field.clear();
         for (int row = 0; row < field.getDepth(); row++) {
             for (int col = 0; col < field.getWidth(); col++) {
-                if (rand.nextDouble() <= FOX_CREATION_PROBABILITY) {
-                    Fox fox = new Fox(true);
+
+                if (rand.nextDouble() <= TIGER_CREATION_PROBABILITY) {
+                    Animal tiger = new Tiger(true);
+                    animals.add(tiger);
+                    tiger.setLocation(row, col);
+                    field.place(tiger, row, col);
+                }else if (rand.nextDouble() <= FOX_CREATION_PROBABILITY) {
+                    Animal fox = new Fox(true);
                     animals.add(fox);
                     fox.setLocation(row, col);
                     field.place(fox, row, col);
                 } else if (rand.nextDouble() <= RABBIT_CREATION_PROBABILITY) {
-                    Rabbit rabbit = new Rabbit(true);
+                    Animal rabbit = new Rabbit(true);
                     animals.add(rabbit);
                     rabbit.setLocation(row, col);
                     field.place(rabbit, row, col);

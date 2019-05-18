@@ -155,9 +155,12 @@ public class Field {
         int row = location.getRow();
         int col = location.getCol();
         LinkedList locations = new LinkedList();
+        //roffset = {-1,0,1}
         for (int roffset = -1; roffset <= 1; roffset++) {
             int nextRow = row + roffset;
+            //location will be within the valid bounds of the field.
             if (nextRow >= 0 && nextRow < depth) {
+                //coffset = {-1,0,1}
                 for (int coffset = -1; coffset <= 1; coffset++) {
                     int nextCol = col + coffset;
                     // Exclude invalid locations and the original location.
