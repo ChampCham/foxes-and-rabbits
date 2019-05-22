@@ -1,7 +1,6 @@
-package io.muzoo.ooc.ecosystems.animal;
+package io.muzoo.ooc.ecosystems.model;
 
 import io.muzoo.ooc.ecosystems.Field;
-import io.muzoo.ooc.ecosystems.Location;
 
 import java.util.List;
 
@@ -37,11 +36,6 @@ public class Fox extends Predator{
     public Fox(){ super(); }
 
     @Override
-    public void act(Field field, Field updatedField, List<Animal> newAnimals) {
-        hunt(field,updatedField,newAnimals);
-    }
-
-    @Override
     protected int getMaxAge(){ return MAX_AGE; }
 
     @Override
@@ -59,4 +53,12 @@ public class Fox extends Predator{
     @Override
     protected String getClassName(){ return "fox"; }
 
+
+    @Override
+    public void act(Field field, Field updatedField, List<Actor> newActors) { hunt(field,updatedField,newActors); }
+
+    @Override
+    public boolean isActive() {
+        return false;
+    }
 }

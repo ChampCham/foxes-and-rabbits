@@ -1,4 +1,4 @@
-package io.muzoo.ooc.ecosystems.animal;
+package io.muzoo.ooc.ecosystems.model;
 
 import io.muzoo.ooc.ecosystems.AnimalFactory;
 import io.muzoo.ooc.ecosystems.Field;
@@ -7,7 +7,7 @@ import io.muzoo.ooc.ecosystems.Location;
 import java.util.List;
 import java.util.Random;
 
-public abstract class Animal {
+public abstract class Animal implements Actor{
     // Characteristics shared by all animals (static fields).
 
     // A shared random number generator to control breeding.
@@ -126,12 +126,7 @@ public abstract class Animal {
         }
     }
 
-    /**
-     * Make this animal act – that is, make it do whatever
-     * it wants/needs to do.
-     * @param newAnimals A list to return newly born animals.
-     */
-    abstract public void act(Field field,Field updatedField,List<Animal> newAnimals);
+
     /**
      * Return the max age of this animal.
      * @return The max age of this animal.

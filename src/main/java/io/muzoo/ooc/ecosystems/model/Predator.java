@@ -1,6 +1,5 @@
-package io.muzoo.ooc.ecosystems.animal;
+package io.muzoo.ooc.ecosystems.model;
 
-import io.muzoo.ooc.ecosystems.AnimalFactory;
 import io.muzoo.ooc.ecosystems.Field;
 import io.muzoo.ooc.ecosystems.Location;
 

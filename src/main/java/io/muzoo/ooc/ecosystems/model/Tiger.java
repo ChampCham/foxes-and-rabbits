@@ -1,7 +1,6 @@
-package io.muzoo.ooc.ecosystems.animal;
+package io.muzoo.ooc.ecosystems.model;
 
 import io.muzoo.ooc.ecosystems.Field;
-import io.muzoo.ooc.ecosystems.Location;
 
 import java.util.List;
 
@@ -24,13 +23,7 @@ public class Tiger extends Predator{
      * Create a tiger. A tiger can be created as a new born (age zero
      * and not hungry) or with random age.
      */
-
     public Tiger(){ super(); }
-
-    @Override
-    public void act(Field field, Field updatedField, List<Animal> newAnimals) {
-        hunt(field,updatedField,newAnimals);
-    }
 
     @Override
     protected int getMaxAge(){ return MAX_AGE; }
@@ -49,4 +42,12 @@ public class Tiger extends Predator{
 
     @Override
     protected String getClassName(){ return "tiger"; }
+
+    @Override
+    public void act(Field field, Field updatedField, List<Actor> newActors) {  hunt(field,updatedField,newActors); }
+
+    @Override
+    public boolean isActive() {
+        return false;
+    }
 }

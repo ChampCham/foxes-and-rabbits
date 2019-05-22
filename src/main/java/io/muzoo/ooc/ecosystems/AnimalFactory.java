@@ -1,9 +1,9 @@
 package io.muzoo.ooc.ecosystems;
 
-import io.muzoo.ooc.ecosystems.animal.Animal;
-import io.muzoo.ooc.ecosystems.animal.Fox;
-import io.muzoo.ooc.ecosystems.animal.Rabbit;
-import io.muzoo.ooc.ecosystems.animal.Tiger;
+import io.muzoo.ooc.ecosystems.model.Animal;
+import io.muzoo.ooc.ecosystems.model.Fox;
+import io.muzoo.ooc.ecosystems.model.Rabbit;
+import io.muzoo.ooc.ecosystems.model.Tiger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,7 @@ public class AnimalFactory {
         }
     };
 
-    public static Animal create(String animalType,boolean randomAge, Location location){
+    public static io.muzoo.ooc.ecosystems.model.Animal create(String animalType, boolean randomAge, Location location){
         Class<? extends Animal> animalClass =registeredAnimalClasses.get(animalType);
         Animal animal = null;
         try {
