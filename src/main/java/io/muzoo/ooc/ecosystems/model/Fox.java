@@ -1,39 +1,28 @@
 package io.muzoo.ooc.ecosystems.model;
 
-import io.muzoo.ooc.ecosystems.Field;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-import java.util.List;
+public class Fox extends Animal{
 
-/**
- * A simple model of a fox.
- * Foxes age, move, eat rabbits, and die.
- *
- * @author David J. Barnes and Michael Kolling
- * @version 2002.10.28
- */
-public class Fox extends Predator{
-    // Characteristics shared by all foxes (static fields).
-
-    // The age at which a fox can start to breed.
     private static final int BREEDING_AGE = 10;
-    // The age to which a fox can live.
-    private static final int MAX_AGE = 150;
-    // The likelihood of a fox breeding.
-    private static final double BREEDING_PROBABILITY = 0.09;
-    // The maximum number of births.
+
+    private static final int MAX_AGE = 80;
+
+    private static final double BREEDING_PROBABILITY = 0.2;
+
     private static final int MAX_LITTER_SIZE = 3;
-    // The food value of a single rabbit. In effect, this is the
-    // number of steps a fox can go before it has to eat again.
-    private static final int RABBIT_FOOD_VALUE = 4;
 
+    private static final int RABBIT_FOOD_VALUE = 12;
 
+    private  final String NAME = "fox";
 
-    /**
-     * Create a fox. A fox can be created as a new born (age zero
-     * and not hungry) or with random age.
-     *
-     */
-    public Fox(){ super(); }
+    private  final Set<String> FOOD_NAME = new HashSet<>(
+            Arrays.asList("rabbit")
+    );
+
+    public Fox(){ }
 
     @Override
     protected int getMaxAge(){ return MAX_AGE; }
@@ -48,17 +37,15 @@ public class Fox extends Predator{
     protected int getBreedingAge(){ return BREEDING_AGE; }
 
     @Override
-    protected int getRabbitFoodValue(){ return RABBIT_FOOD_VALUE; }
+    protected int getFoodValue(){ return RABBIT_FOOD_VALUE; }
 
     @Override
-    protected String getClassName(){ return "fox"; }
-
-
-    @Override
-    public void act(Field field, Field updatedField, List<Actor> newActors) { hunt(field,updatedField,newActors); }
+    protected String getName() {
+        return NAME;
+    }
 
     @Override
-    public boolean isActive() {
-        return false;
+    protected Set<String> getFoodName() {
+        return FOOD_NAME;
     }
 }

@@ -1,6 +1,7 @@
 package io.muzoo.ooc.ecosystems;
 
 import io.muzoo.ooc.ecosystems.model.*;
+import io.muzoo.ooc.ecosystems.view.SimulatorView;
 
 import java.util.Random;
 import java.util.List;
@@ -23,21 +24,13 @@ public class Simulator {
     private static final int DEFAULT_WIDTH = 50;
     // The default depth of the grid.
     private static final int DEFAULT_DEPTH = 50;
-    // The probability that a fox will be created in any given grid position.
-    private static final double TIGER_CREATION_PROBABILITY = 0.01;
-    // The probability that a fox will be created in any given grid position.
-    private static final double FOX_CREATION_PROBABILITY = 0.02;
-    // The probability that a rabbit will be created in any given grid position.
-    private static final double RABBIT_CREATION_PROBABILITY = 0.08;
 
     // The list of actors in the field
     private List<Actor> actors;
     // The list of actors just born
     private List<Actor> newActors;
     // The current state of the field.
-    private Field field;
-    // A second field, used to build the next stage of the simulation.
-    private Field updatedField;
+    public  Field field;
     // The current step of the simulation.
     private int step;
     // A graphical view of the simulation.
@@ -66,13 +59,14 @@ public class Simulator {
         actors = new ArrayList<>();
         newActors = new ArrayList<>();
         field = new Field(depth, width);
-        updatedField = new Field(depth, width);
 
         // Create a view of the state of each location in the field.
         view = new SimulatorView(depth, width);
         view.setColor(Fox.class, Color.blue);
         view.setColor(Rabbit.class, Color.orange);
         view.setColor(Tiger.class, Color.red);
+        view.setColor(Plant.class, Color.green);
+        view.setColor(Hunter.class, Color.BLACK);
 
         // Setup a valid starting point.
         reset();
@@ -108,16 +102,17 @@ public class Simulator {
         // let all actors act
         for (Iterator<Actor> iter = actors.iterator(); iter.hasNext(); ) {
             Actor actor = iter.next();
-            actor.act(field, updatedField,newActors);
+            if (!actor.isActive()){
+                iter.remove();
+            }
+            else {
+                actor.act(newActors);
+
+            }
         }
+        System.out.println(actors.size());
         // add new born actors to the list of actors
         actors.addAll(newActors);
-        // Swap the field and updatedField at the end of the step.
-        Field temp = field;
-        field = updatedField;
-        updatedField = temp;
-        updatedField.clear();// clear the old field
-
         // display the new field on screen
         view.showStatus(step, field);
     }
@@ -129,9 +124,7 @@ public class Simulator {
         step = 0;
         actors.clear();
         field.clear(); //Null grid
-        updatedField.clear();
         populate(field);
-
         // Show the starting state in the view.
         view.showStatus(step, field);
     }
@@ -146,21 +139,12 @@ public class Simulator {
         field.clear();
         for (int row = 0; row < field.getDepth(); row++) {
             for (int col = 0; col < field.getWidth(); col++) {
-
-                if (rand.nextDouble() <= TIGER_CREATION_PROBABILITY) {
-                    Actor tiger = AnimalFactory.create("tiger",true, new Location(row,col));
-                    actors.add(tiger);
-                    field.place(tiger, row, col);
-                }else if (rand.nextDouble() <= FOX_CREATION_PROBABILITY) {
-                    Actor fox = AnimalFactory.create("fox",true, new Location(row,col));
-                    actors.add(fox);
-                    field.place(fox, row, col);
-                } else if (rand.nextDouble() <= RABBIT_CREATION_PROBABILITY) {
-                    Actor rabbit = AnimalFactory.create("rabbit",true, new Location(row,col));
-                    actors.add(rabbit);
-                    field.place(rabbit, row, col);
+                Location location = new Location(row, col);
+                Actor actor = LivingFactory.create(location, field);
+                if (actor != null) {
+                    actors.add(actor);
+                    field.place(actor, row, col);
                 }
-                // else leave the location empty.
             }
         }
         Collections.shuffle(actors);

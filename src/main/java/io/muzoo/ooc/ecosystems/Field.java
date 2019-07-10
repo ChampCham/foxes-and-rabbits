@@ -18,7 +18,7 @@ public class Field {
     // The depth and width of the field.
     private int depth, width;
     // Storage for the animals.
-    private Object[][] field;
+    private  Object[][] field;
 
     /**
      * Represent a field of the given dimensions.
@@ -100,11 +100,15 @@ public class Field {
      * may be the same object as the location parameter.
      */
     public Location randomAdjacentLocation(Location location) {
+        return randomAdjacentLocation(location,3);
+    }
+
+    public Location randomAdjacentLocation(Location location, int bound) {
         int row = location.getRow();
         int col = location.getCol();
         // Generate an offset of -1, 0, or +1 for both the current row and col.
-        int nextRow = row + rand.nextInt(3) - 1;
-        int nextCol = col + rand.nextInt(3) - 1;
+        int nextRow = row + rand.nextInt(bound) - 1;
+        int nextCol = col + rand.nextInt(bound) - 1;
         // Check in case the new location is outside the bounds.
         if (nextRow < 0 || nextRow >= depth || nextCol < 0 || nextCol >= width) {
             return location;
@@ -114,6 +118,7 @@ public class Field {
             return location;
         }
     }
+
 
     /**
      * Try to find a free location that is adjacent to the
@@ -151,17 +156,22 @@ public class Field {
      * @param location The location from which to generate adjacencies.
      * @return An iterator over locations adjacent to that given.
      */
+
     public Iterator adjacentLocations(Location location) {
+        return adjacentLocations(location, 1);
+    }
+
+    public Iterator adjacentLocations(Location location, int bound) {
         int row = location.getRow();
         int col = location.getCol();
         LinkedList locations = new LinkedList();
         //roffset = {-1,0,1}
-        for (int roffset = -1; roffset <= 1; roffset++) {
+        for (int roffset = -bound; roffset <= bound; roffset++) {
             int nextRow = row + roffset;
             //location will be within the valid bounds of the field.
             if (nextRow >= 0 && nextRow < depth) {
                 //coffset = {-1,0,1}
-                for (int coffset = -1; coffset <= 1; coffset++) {
+                for (int coffset = -bound; coffset <= bound; coffset++) {
                     int nextCol = col + coffset;
                     // Exclude invalid locations and the original location.
                     if (nextCol >= 0 && nextCol < width && (roffset != 0 || coffset != 0)) {

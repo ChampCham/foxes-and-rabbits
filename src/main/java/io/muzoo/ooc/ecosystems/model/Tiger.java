@@ -1,28 +1,27 @@
 package io.muzoo.ooc.ecosystems.model;
 
-import io.muzoo.ooc.ecosystems.Field;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-import java.util.List;
+public class Tiger extends Animal{
 
-public class Tiger extends Predator{
-    // Characteristics shared by all tigeres (static fields).
-
-    // The age at which a tiger can start to breed.
     private static final int BREEDING_AGE = 10;
-    // The age to which a tiger can live.
-    private static final int MAX_AGE = 150;
-    // The likelihood of a tiger breeding.
-    private static final double BREEDING_PROBABILITY = 0.09;
-    // The maximum number of births.
-    private static final int MAX_LITTER_SIZE = 3;
-    // The food value of a single rabbit. In effect, this is the
-    // number of steps a tiger can go before it has to eat again.
-    private static final int RABBIT_FOOD_VALUE = 4;
 
-    /**
-     * Create a tiger. A tiger can be created as a new born (age zero
-     * and not hungry) or with random age.
-     */
+    private static final int MAX_AGE = 100;
+
+    private static final double BREEDING_PROBABILITY = 0.2;
+
+    private static final int MAX_LITTER_SIZE = 3;
+
+    private static final int RABBIT_FOOD_VALUE = 10;
+
+    private  final String NAME = "tiger";
+
+    private  final Set<String> FOOD_NAME = new HashSet<>(
+            Arrays.asList("rabbit","fox")
+    );
+
     public Tiger(){ super(); }
 
     @Override
@@ -38,16 +37,11 @@ public class Tiger extends Predator{
     protected int getBreedingAge(){ return BREEDING_AGE; }
 
     @Override
-    protected int getRabbitFoodValue(){ return RABBIT_FOOD_VALUE; }
+    protected String getName() { return NAME; }
 
     @Override
-    protected String getClassName(){ return "tiger"; }
+    protected Set<String> getFoodName() { return FOOD_NAME; }
 
     @Override
-    public void act(Field field, Field updatedField, List<Actor> newActors) {  hunt(field,updatedField,newActors); }
-
-    @Override
-    public boolean isActive() {
-        return false;
-    }
+    protected int getFoodValue() { return RABBIT_FOOD_VALUE; }
 }
